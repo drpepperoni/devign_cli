@@ -1,17 +1,46 @@
-# Files and directories created by pub
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
 .dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
 .packages
-pubspec.lock
+.pub-cache/
+.pub/
+.fvm/flutter_sdk
+/build/
 
-# Conventional directory for build outputs
-build/
+# Web related
+lib/generated_plugin_registrant.dart
 
-# Directory created by dartdoc
-doc/api/
+# Symbolication related
+app.*.symbols
 
-# Temporary Files
-.tmp/
+# Obfuscation related
+app.*.map.json
 
-# Files generated during tests
-.test_coverage.dart
-coverage/
+/doc/api/
+/coverage/
+coverage_report.tar.gz

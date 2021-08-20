@@ -1,9 +1,9 @@
 # Example
 
 ```sh
-# Activate Very Good CLI
-$ dart pub global activate very_good_cli
+# Activate Devign CLI
+$ dart pub global activate devign_cli
 
 # See list of available commands
-very_good --help
+devign --help
 ```

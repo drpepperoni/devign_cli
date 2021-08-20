@@ -1,7 +1,6 @@
-name: very_good_cli
-description: A Very Good Command Line Interface for Dart created by Very Good Ventures.
+name: devign_cli
+description: A Devign Command Line Interface for Dart created by Devign.
 version: 0.3.3
-homepage: https://github.com/VeryGoodOpenSource/very_good_cli
 
 environment:
   sdk: ">=2.13.0 <3.0.0"
@@ -24,4 +23,4 @@ dev_dependencies:
   test: ^1.17.0
 
 executables:
-  very_good:
+  devign:

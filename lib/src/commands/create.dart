@@ -5,13 +5,10 @@ import 'package:mason/mason.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:universal_io/io.dart';
-import 'package:usage/usage_io.dart';
-import 'package:very_good_analysis/very_good_analysis.dart';
-import 'package:very_good_cli/src/command_runner.dart';
-import 'package:very_good_cli/src/templates/templates.dart';
+import 'package:devign_cli/src/templates/templates.dart';
 
-const _defaultOrgName = 'com.example.verygoodcore';
-const _defaultDescription = 'A Very Good Project created by Very Good CLI.';
+const _defaultOrgName = 'com.example.devigncore';
+const _defaultDescription = 'A Devign Project created by Devign CLI.';
 final _defaultTemplate = CoreTemplate();
 
 final _templates = [_defaultTemplate, DartPkgTemplate(), FlutterPkgTemplate()];
@@ -26,16 +23,14 @@ final RegExp _orgNameRegExp = RegExp(r'^[a-zA-Z][\w-]*(\.[a-zA-Z][\w-]*)+$');
 typedef GeneratorBuilder = Future<MasonGenerator> Function(MasonBundle);
 
 /// {@template create_command}
-/// `very_good create` command creates code from various built-in templates.
+/// `devign create` command creates code from various built-in templates.
 /// {@endtemplate}
 class CreateCommand extends Command<int> {
   /// {@macro create_command}
   CreateCommand({
-    required Analytics analytics,
     Logger? logger,
     GeneratorBuilder? generator,
-  })  : _analytics = analytics,
-        _logger = logger ?? Logger(),
+  })  : _logger = logger ?? Logger(),
         _generator = generator ?? MasonGenerator.fromBundle {
     argParser
       ..addOption(
@@ -69,13 +64,12 @@ class CreateCommand extends Command<int> {
       );
   }
 
-  final Analytics _analytics;
   final Logger _logger;
   final Future<MasonGenerator> Function(MasonBundle) _generator;
 
   @override
   String get description =>
-      'Creates a new very good project in the specified directory.';
+      'Creates a new devign project in the specified directory.';
 
   @override
   String get summary => '$invocation\n$description';
@@ -84,7 +78,7 @@ class CreateCommand extends Command<int> {
   String get name => 'create';
 
   @override
-  String get invocation => 'very_good create <output directory>';
+  String get invocation => 'devign create <output directory>';
 
   /// [ArgResults] which can be overridden for testing.
   @visibleForTesting
@@ -112,14 +106,6 @@ class CreateCommand extends Command<int> {
     generateDone('Generated $fileCount file(s)');
 
     await template.onGenerateComplete(_logger, outputDirectory);
-
-    unawaited(_analytics.sendEvent(
-      'create',
-      generator.id,
-      label: generator.description,
-    ));
-    await _analytics.waitForLastPing(timeout: VeryGoodCommandRunner.timeout);
-
     return ExitCode.success.code;
   }
 
@@ -170,7 +156,7 @@ class CreateCommand extends Command<int> {
         'Each part must start with a letter and only include '
         'alphanumeric characters (A-Z, a-z, 0-9), underscores (_), '
         'and hyphens (-)\n'
-        '(ex. very.good.org)',
+        '(ex. devign.de)',
         usage,
       );
     }

@@ -1,98 +1,47 @@
-# Very Good CLI
+# Devign CLI
 
-[![Very Good Ventures][logo]][very_good_ventures_link]
+Built upon [very_good_cli](https://github.com/VeryGoodOpenSource/very_good_cli) with 💙 and 🍪
 
-Developed with 💙 by [Very Good Ventures][very_good_ventures_link] 🦄
-
-[![ci][ci_badge]][ci_link]
-[![coverage][coverage_badge]][ci_link]
-[![pub package][pub_badge]][pub_link]
-[![style: very good analysis][very_good_analysis_badge]][very_good_analysis_link]
 [![License: MIT][license_badge]][license_link]
+
+**Special thanks** to Felix Angelov for setting aside his valuable time for a tutoring session on [mason](https://pub.dev/packages/mason) and how [very_good_cli](https://github.com/VeryGoodOpenSource/very_good_cli) uses it. Thank you, Felix!
 
 ---
 
-A Very Good Command Line Interface for Dart.
+A Delicious Command Line Interface for Dart 🍪.
 
 ## Installing
 
 ```sh
-$ dart pub global activate very_good_cli
+$ dart pub global activate --source git git@github.com:GroovinChip/groovin_cli.git
 ```
 
 ## Commands
 
-### `$ very_good create`
+### `$ devign create`
 
-Create a very good project in seconds based on the provided template. The [Very Good Core][very_good_core_link] template is used by default.
-
-![Very Good Create][very_good_create]
-
-```sh
-Creates a new very good project in the specified directory.
-
-Usage: very_good create <output directory>
--h, --help                    Print this usage information.
-    --project-name            The project name for this new project. This must be a valid dart package name.
-    --desc                    The description for this new project.
-                              (defaults to "A Very Good Project created by Very Good CLI.")
-    --org-name                The organization for this new project.
-                              (defaults to "com.example.verygoodcore")
--t, --template                The template used to generate this new project.
-
-          [core] (default)    Generate a Very Good Flutter application.
-          [dart_pkg]          Generate a reusable Dart package.
-          [flutter_pkg]       Generate a reusable Flutter package.
-```
-
-### What's Included in Very Good Core? 📦
-
-Out of the box, [Very Good Core][very_good_core_link] includes:
-
-✅&nbsp; [Cross Platform Support][flutter_cross_platform_link] - Built-in support for iOS, Android, and Web (Desktop coming soon!)
-
-✅&nbsp; [Build Flavors][flutter_flavors_link] - Multiple flavor support for development, staging, and production
-
-✅&nbsp; [Internationalization Support][internationalization_link] - Internationalization support using synthetic code generation to streamline the development process
-
-✅&nbsp; [Sound Null-Safety][null_safety_link] - No more null-dereference exceptions at runtime. Develop with a sound, static type system.
-
-✅&nbsp; [Bloc][bloc_link] - Integrated bloc architecture for scalable, testable code which offers a clear separation between business logic and presentation
-
-✅&nbsp; [Testing][testing_link] - Unit and Widget Tests with 100% line coverage (Integration Tests coming soon!)
-
-✅&nbsp; [Logging][logging_link] - Built-in, extensible logging to capture uncaught Flutter and Dart Exceptions
-
-✅&nbsp; [Very Good Analysis][very_good_analysis_link] - Strict Lint Rules which are used at [Very Good Ventures][very_good_ventures_link]
-
-✅&nbsp; [Continuous Integration][github_actions_link] - Lint, format, test, and enforce code coverage using [GitHub Actions][github_actions_link]
-
-_\* Learn more at [Flutter Starter App: Very Good Core & CLI][very_good_cli_blog_link]_
+Create a new devign flutter starter application in seconds based on [Devign Core](https://github.com/GroovinChip/groovin_core).
 
 ---
 
-### `$ very_good --help`
+### `$ devign --help`
 
 See the complete list of commands and usage information.
 
 ```sh
-🦄 A Very Good Command Line Interface
+🍪 A Delicious Command Line Interface
 
-Usage: very_good <command> [arguments]
+Usage: devign <command> [arguments]
 
 Global options:
 -h, --help           Print this usage information.
     --version        Print the current version.
-    --analytics      Toggle anonymous usage statistics.
-
-          [false]    Disable anonymous usage statistics
-          [true]     Enable anonymous usage statistics
 
 Available commands:
-  create   very_good create <output directory>
-           Creates a new very good flutter project in the specified directory.
+  create   devign create <output directory>
+           Creates a new devign flutter project in the specified directory.
 
-Run "very_good help <command>" for more information about a command.
+Run "devign help <command>" for more information about a command.
 ```
 
 [bloc_link]: https://bloclibrary.dev
@@ -114,6 +63,6 @@ Run "very_good help <command>" for more information about a command.
 [very_good_analysis_badge]: https://img.shields.io/badge/style-very_good_analysis-B22C89.svg
 [very_good_analysis_link]: https://pub.dev/packages/very_good_analysis
 [very_good_cli_blog_link]: https://verygood.ventures/blog/flutter-starter-app-very-good-core-cli?utm_source=github&utm_medium=banner&utm_campaign=CLIblog
-[very_good_core_link]: doc/very_good_core.md
+[very_good_core_link]: doc/groovin_core.md
 [very_good_create]: https://raw.githubusercontent.com/VeryGoodOpenSource/very_good_cli/main/doc/assets/very_good_create.gif
 [very_good_ventures_link]: https://verygood.ventures/?utm_source=github&utm_medium=banner&utm_campaign=CLI

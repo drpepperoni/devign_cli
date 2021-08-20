@@ -3,7 +3,7 @@
 
 import 'package:mason/mason.dart';
 
-final veryGoodCoreBundle = MasonBundle.fromJson(<String, dynamic>{
+final devignCoreBundle = MasonBundle.fromJson(<String, dynamic>{
   "files": [
     {
       "path": "LICENSE",
@@ -1388,7 +1388,7 @@ final veryGoodCoreBundle = MasonBundle.fromJson(<String, dynamic>{
       "type": "text"
     }
   ],
-  "name": "very_good_core",
-  "description": "Core Very Good Flutter App",
+  "name": "devign_core",
+  "description": "Core Devign Flutter App",
   "vars": ["project_name", "org_name", "description"]
 });

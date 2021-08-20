@@ -1,11 +1,10 @@
-import 'package:io/ansi.dart';
 import 'package:mason/mason.dart';
 import 'package:universal_io/io.dart';
-import 'package:very_good_cli/src/flutter_cli.dart';
-import 'package:very_good_cli/src/templates/templates.dart';
+import 'package:devign_cli/src/flutter_cli.dart';
+import 'package:devign_cli/src/templates/templates.dart';
 
 /// {@template template}
-/// Dart class that represents a VeryGoodCLI supported template.
+/// Dart class that represents a DevignCLI supported template.
 /// Each template consists of a [MasonBundle], name,
 /// and help text describing the template.
 /// {@endtemplate}
@@ -58,7 +57,7 @@ class DartPkgTemplate extends Template {
   void _logSummary(Logger logger) {
     logger
       ..info('\n')
-      ..alert('Created a Very Good Dart package! 🦄')
+      ..alert('Created a Devign Dart package! 🦄')
       ..info('\n');
   }
 }
@@ -90,7 +89,7 @@ class FlutterPkgTemplate extends Template {
   void _logSummary(Logger logger) {
     logger
       ..info('\n')
-      ..alert('Created a Very Good Flutter package! 🦄')
+      ..alert('Created a Devign Flutter package! 🦄')
       ..info('\n');
   }
 }
@@ -103,8 +102,8 @@ class CoreTemplate extends Template {
   CoreTemplate()
       : super(
           name: 'core',
-          bundle: veryGoodCoreBundle,
-          help: 'Generate a Very Good Flutter application.',
+          bundle: devignCoreBundle,
+          help: 'Generate a Devign Flutter application.',
         );
 
   @override
@@ -123,20 +122,8 @@ class CoreTemplate extends Template {
   void _logSummary(Logger logger) {
     logger
       ..info('\n')
-      ..alert('Created a Very Good App! 🦄')
-      ..info('\n')
-      ..info(
-        lightGray.wrap(
-          '''
-+----------------------------------------------------+
-| Looking for more features?                         |
-| We have an enterprise-grade solution for companies |
-| called Very Good Start.                            |
-|                                                    |
-| For more info visit:                               |
-| https://verygood.ventures/solution/very-good-start |
-+----------------------------------------------------+''',
-        ),
+      ..alert(
+        'Created a Devign App! 🦄',
       );
   }
 }

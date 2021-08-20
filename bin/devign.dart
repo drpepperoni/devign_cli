@@ -1,8 +1,8 @@
 import 'package:universal_io/io.dart';
-import 'package:very_good_cli/src/command_runner.dart';
+import 'package:devign_cli/src/command_runner.dart';
 
 Future<void> main(List<String> args) async {
-  await _flushThenExit(await VeryGoodCommandRunner().run(args));
+  await _flushThenExit(await DevignCommandRunner().run(args));
 }
 
 /// Flushes the stdout and stderr streams, then exits the program with the given

@@ -4,34 +4,31 @@ import 'package:io/io.dart';
 import 'package:mason/mason.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
-import 'package:usage/usage_io.dart';
-import 'package:very_good_cli/src/command_runner.dart';
-import 'package:very_good_cli/src/commands/create.dart';
-import 'package:very_good_cli/src/templates/templates.dart';
+import 'package:devign_cli/src/command_runner.dart';
+import 'package:devign_cli/src/commands/create.dart';
+import 'package:devign_cli/src/templates/templates.dart';
 
 const expectedUsage = [
   // ignore: no_adjacent_strings_in_list
-  'Creates a new very good project in the specified directory.\n'
+  'Creates a new devign project in the specified directory.\n'
       '\n'
-      'Usage: very_good create <output directory>\n'
+      'Usage: devign create <output directory>\n'
       '-h, --help                    Print this usage information.\n'
       '''    --project-name            The project name for this new project. This must be a valid dart package name.\n'''
       '    --desc                    The description for this new project.\n'
-      '''                              (defaults to "A Very Good Project created by Very Good CLI.")\n'''
+      '''                              (defaults to "A Devign Project created by Devign CLI.")\n'''
       '    --org-name                The organization for this new project.\n'
-      '                              (defaults to "com.example.verygoodcore")\n'
+      '                              (defaults to "com.example.devigncore")\n'
       '''-t, --template                The template used to generate this new project.\n'''
       '\n'
-      '''          [core] (default)    Generate a Very Good Flutter application.\n'''
+      '''          [core] (default)    Generate a Devign Flutter application.\n'''
       '          [dart_pkg]          Generate a reusable Dart package.\n'
       '          [flutter_pkg]       Generate a reusable Flutter package.\n'
       '\n'
-      'Run "very_good help" to see global options.'
+      'Run "devign help" to see global options.'
 ];
 
 class MockArgResults extends Mock implements ArgResults {}
-
-class MockAnalytics extends Mock implements Analytics {}
 
 class MockLogger extends Mock implements Logger {}
 
@@ -44,9 +41,8 @@ void main() {
   group('Create', () {
     late List<String> progressLogs;
     late List<String> printLogs;
-    late Analytics analytics;
     late Logger logger;
-    late VeryGoodCommandRunner commandRunner;
+    late DevignCommandRunner commandRunner;
 
     void Function() overridePrint(void Function() fn) {
       return () {
@@ -64,24 +60,13 @@ void main() {
     setUp(() {
       printLogs = [];
       progressLogs = <String>[];
-      analytics = MockAnalytics();
-      when(() => analytics.firstRun).thenReturn(false);
-      when(() => analytics.enabled).thenReturn(false);
-      when(
-        () => analytics.sendEvent(any(), any(), label: any(named: 'label')),
-      ).thenAnswer((_) async {});
-      when(
-        () => analytics.waitForLastPing(timeout: any(named: 'timeout')),
-      ).thenAnswer((_) async {});
-
       logger = MockLogger();
       when(() => logger.progress(any())).thenReturn(
         ([_]) {
           if (_ != null) progressLogs.add(_);
         },
       );
-      commandRunner = VeryGoodCommandRunner(
-        analytics: analytics,
+      commandRunner = DevignCommandRunner(
         logger: logger,
       );
     });
@@ -99,7 +84,7 @@ void main() {
     }));
 
     test('can be instantiated without explicit logger', () {
-      final command = CreateCommand(analytics: analytics);
+      final command = CreateCommand();
       expect(command, isNotNull);
     });
 
@@ -143,7 +128,6 @@ void main() {
       final argResults = MockArgResults();
       final generator = MockMasonGenerator();
       final command = CreateCommand(
-        analytics: analytics,
         logger: logger,
         generator: (_) async => generator,
       )..argResultOverrides = argResults;
@@ -161,7 +145,7 @@ void main() {
       verify(
         () => logger.progress('Running "flutter packages get" in .tmp'),
       ).called(1);
-      verify(() => logger.alert('Created a Very Good App! 🦄')).called(1);
+      verify(() => logger.alert('Created a Devign App! 🦄')).called(1);
       verify(
         () => generator.generate(
           any(
@@ -176,21 +160,11 @@ void main() {
             'org_name': [
               {'value': 'com', 'separator': '.'},
               {'value': 'example', 'separator': '.'},
-              {'value': 'verygoodcore', 'separator': ''}
+              {'value': 'devigncore', 'separator': ''}
             ],
             'description': '',
           },
         ),
-      ).called(1);
-      verify(
-        () => analytics.sendEvent(
-          'create',
-          'generator_id',
-          label: 'generator description',
-        ),
-      ).called(1);
-      verify(
-        () => analytics.waitForLastPing(timeout: VeryGoodCommandRunner.timeout),
       ).called(1);
     });
 
@@ -198,14 +172,13 @@ void main() {
       final argResults = MockArgResults();
       final generator = MockMasonGenerator();
       final command = CreateCommand(
-        analytics: analytics,
         logger: logger,
         generator: (_) async => generator,
       )..argResultOverrides = argResults;
       when(() => argResults['project-name'] as String?).thenReturn('my_app');
       when(
         () => argResults['desc'] as String?,
-      ).thenReturn('very good description');
+      ).thenReturn('devign description');
       when(() => argResults.rest).thenReturn(['.tmp']);
       when(() => generator.id).thenReturn('generator_id');
       when(() => generator.description).thenReturn('generator description');
@@ -228,9 +201,9 @@ void main() {
             'org_name': [
               {'value': 'com', 'separator': '.'},
               {'value': 'example', 'separator': '.'},
-              {'value': 'verygoodcore', 'separator': ''}
+              {'value': 'devigncore', 'separator': ''}
             ],
-            'description': 'very good description',
+            'description': 'devign description',
           },
         ),
       ).called(1);
@@ -244,7 +217,7 @@ void main() {
               'Each part must start with a letter and only include '
               'alphanumeric characters (A-Z, a-z, 0-9), underscores (_), '
               'and hyphens (-)\n'
-              '(ex. very.good.org)';
+              '(ex. devign.de)';
           final result = await commandRunner.run(
             ['create', '.', '--org-name', orgName],
           );
@@ -257,19 +230,19 @@ void main() {
         });
 
         test('less than 2 domains', () {
-          expectInvalidOrgName('verybadtest');
+          expectInvalidOrgName('devignbadtest');
         });
 
         test('invalid characters present', () {
-          expectInvalidOrgName('very%.bad@.#test');
+          expectInvalidOrgName('devign%.bad@.#test');
         });
 
         test('segment starts with a non-letter', () {
-          expectInvalidOrgName('very.bad.1test');
+          expectInvalidOrgName('devign.bad.1test');
         });
 
         test('valid prefix but invalid suffix', () {
-          expectInvalidOrgName('very.good.prefix.bad@@suffix');
+          expectInvalidOrgName('dev.ign.prefix.bad@@suffix');
         });
       });
 
@@ -281,7 +254,6 @@ void main() {
           final argResults = MockArgResults();
           final generator = MockMasonGenerator();
           final command = CreateCommand(
-            analytics: analytics,
             logger: logger,
             generator: (_) async => generator,
           )..argResultOverrides = argResults;
@@ -316,51 +288,51 @@ void main() {
         }
 
         test('alphanumeric with three parts', () async {
-          await expectValidOrgName('very.good.ventures', [
-            {'value': 'very', 'separator': '.'},
-            {'value': 'good', 'separator': '.'},
+          await expectValidOrgName('dev.ign.ventures', [
+            {'value': 'dev', 'separator': '.'},
+            {'value': 'ign', 'separator': '.'},
             {'value': 'ventures', 'separator': ''},
           ]);
         });
 
         test('containing an underscore', () async {
-          await expectValidOrgName('very.good.test_case', [
-            {'value': 'very', 'separator': '.'},
-            {'value': 'good', 'separator': '.'},
+          await expectValidOrgName('dev.ign.test_case', [
+            {'value': 'dev', 'separator': '.'},
+            {'value': 'ign', 'separator': '.'},
             {'value': 'test case', 'separator': ''},
           ]);
         });
 
         test('containing a hyphen', () async {
-          await expectValidOrgName('very.bad.test-case', [
-            {'value': 'very', 'separator': '.'},
+          await expectValidOrgName('devign.bad.test-case', [
+            {'value': 'devign', 'separator': '.'},
             {'value': 'bad', 'separator': '.'},
             {'value': 'test case', 'separator': ''},
           ]);
         });
 
         test('single character parts', () async {
-          await expectValidOrgName('v.g.v', [
+          await expectValidOrgName('d.v.n', [
+            {'value': 'd', 'separator': '.'},
             {'value': 'v', 'separator': '.'},
-            {'value': 'g', 'separator': '.'},
-            {'value': 'v', 'separator': ''},
+            {'value': 'n', 'separator': ''},
           ]);
         });
 
         test('more than three parts', () async {
-          await expectValidOrgName('very.good.ventures.app.identifier', [
-            {'value': 'very', 'separator': '.'},
-            {'value': 'good', 'separator': '.'},
-            {'value': 'ventures', 'separator': '.'},
+          await expectValidOrgName('de.vi.gn.app.identifier', [
+            {'value': 'de', 'separator': '.'},
+            {'value': 'vi', 'separator': '.'},
+            {'value': 'gn', 'separator': '.'},
             {'value': 'app', 'separator': '.'},
             {'value': 'identifier', 'separator': ''},
           ]);
         });
 
         test('less than three parts', () async {
-          await expectValidOrgName('verygood.ventures', [
-            {'value': 'verygood', 'separator': '.'},
-            {'value': 'ventures', 'separator': ''},
+          await expectValidOrgName('dev.ign', [
+            {'value': 'dev', 'separator': '.'},
+            {'value': 'ign', 'separator': ''},
           ]);
         });
       });
@@ -393,7 +365,6 @@ void main() {
           final argResults = MockArgResults();
           final generator = MockMasonGenerator();
           final command = CreateCommand(
-            analytics: analytics,
             logger: logger,
             generator: (bundle) async {
               expect(bundle, equals(expectedBundle));
@@ -434,22 +405,11 @@ void main() {
                 'org_name': [
                   {'value': 'com', 'separator': '.'},
                   {'value': 'example', 'separator': '.'},
-                  {'value': 'verygoodcore', 'separator': ''}
+                  {'value': 'devigncore', 'separator': ''}
                 ],
                 'description': '',
               },
             ),
-          ).called(1);
-          verify(
-            () => analytics.sendEvent(
-              'create',
-              'generator_id',
-              label: 'generator description',
-            ),
-          ).called(1);
-          verify(
-            () => analytics.waitForLastPing(
-                timeout: VeryGoodCommandRunner.timeout),
           ).called(1);
         }
 
@@ -457,8 +417,8 @@ void main() {
           await expectValidTemplateName(
             getPackagesMsg: 'Running "flutter packages get" in .tmp',
             templateName: 'core',
-            expectedBundle: veryGoodCoreBundle,
-            expectedLogSummary: 'Created a Very Good App! 🦄',
+            expectedBundle: devignCoreBundle,
+            expectedLogSummary: 'Created a Devign App! 🦄',
           );
         });
 
@@ -467,7 +427,7 @@ void main() {
             getPackagesMsg: 'Running "flutter pub get" in .tmp',
             templateName: 'dart_pkg',
             expectedBundle: dartPackageBundle,
-            expectedLogSummary: 'Created a Very Good Dart package! 🦄',
+            expectedLogSummary: 'Created a Devign Dart package! 🦄',
           );
         });
 
@@ -476,7 +436,7 @@ void main() {
             getPackagesMsg: 'Running "flutter packages get" in .tmp',
             templateName: 'flutter_pkg',
             expectedBundle: flutterPackageBundle,
-            expectedLogSummary: 'Created a Very Good Flutter package! 🦄',
+            expectedLogSummary: 'Created a Devign Flutter package! 🦄',
           );
         });
       });
