@@ -35,19 +35,20 @@ class CreateCommand extends Command<int> {
     argParser
       ..addOption(
         'project-name',
-        help: 'The project name for this new project. '
+        help: 'The project name for this new Flutter project. '
             'This must be a valid dart package name.',
+        defaultsTo: null,
       )
       ..addOption(
-        'desc',
-        help: 'The description for this new project.',
-        defaultsTo: _defaultDescription,
+        'description',
+        help: 'The description for this new Flutter project.',
+        defaultsTo: null,
       )
       ..addOption(
-        'org-name',
-        help: 'The organization for this new project.',
-        defaultsTo: _defaultOrgName,
-      )
+      'app-id',
+      help: 'The package or bundle ID for this new Flutter project.',
+      defaultsTo: 'com.example.app',
+          )
       ..addOption(
         'template',
         abbr: 't',
@@ -87,20 +88,20 @@ class CreateCommand extends Command<int> {
   ArgResults get _argResults => argResultOverrides ?? argResults!;
 
   @override
-  Future<int> run() async {
+   Future<int> run() async {
     final outputDirectory = _outputDirectory;
     final projectName = _projectName;
     final description = _description;
-    final orgName = _orgName;
     final template = _template;
+    final packageId = _packageId;
     final generateDone = _logger.progress('Bootstrapping');
     final generator = await _generator(template.bundle);
     final fileCount = await generator.generate(
       DirectoryGeneratorTarget(outputDirectory, _logger),
-      vars: <String, dynamic>{
+      vars: {
         'project_name': projectName,
         'description': description,
-        'org_name': orgName
+        'application_id': packageId,
       },
     );
     generateDone('Generated $fileCount file(s)');
@@ -121,21 +122,11 @@ class CreateCommand extends Command<int> {
   }
 
   //// Gets the description for the project
-  String get _description => _argResults['desc'] as String? ?? '';
+  String get _description => _argResults['description'] as String? ?? '';
 
-  /// Gets the organization name.
-  List<Map<String, String>> get _orgName {
-    final orgName = _argResults['org-name'] as String? ?? _defaultOrgName;
-    _validateOrgName(orgName);
-    final segments = orgName.replaceAll(RegExp('-|_'), ' ').split('.');
-    final org = <Map<String, String>>[];
-    for (var i = 0; i < segments.length; i++) {
-      final segment = segments[i];
-      org.add(
-        {'value': segment, 'separator': i == segments.length - 1 ? '' : '.'},
-      );
-    }
-    return org;
+   String get _packageId {
+    final packageId = _argResults['app-id'] ?? 'com.example.app';
+    return packageId;
   }
 
   Template get _template {
@@ -147,20 +138,6 @@ class CreateCommand extends Command<int> {
     );
   }
 
-  void _validateOrgName(String name) {
-    final isValidOrgName = _isValidOrgName(name);
-    if (!isValidOrgName) {
-      throw UsageException(
-        '"$name" is not a valid org name.\n\n'
-        'A valid org name has at least 2 parts separated by "."\n'
-        'Each part must start with a letter and only include '
-        'alphanumeric characters (A-Z, a-z, 0-9), underscores (_), '
-        'and hyphens (-)\n'
-        '(ex. devign.de)',
-        usage,
-      );
-    }
-  }
 
   void _validateProjectName(String name) {
     final isValidProjectName = _isValidPackageName(name);
@@ -171,10 +148,6 @@ class CreateCommand extends Command<int> {
         usage,
       );
     }
-  }
-
-  bool _isValidOrgName(String name) {
-    return _orgNameRegExp.hasMatch(name);
   }
 
   bool _isValidPackageName(String name) {
